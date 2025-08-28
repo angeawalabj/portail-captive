@@ -1,0 +1,39 @@
+version: "3.9"
+services:
+app:
+build: ./docker/app
+container_name: captive_app
+env_file: .env
+volumes:
+- ./app:/app
+ports:
+- "8000:8000" # FastAPI
+depends_on:
+- db
+
+
+db:
+image: postgres:16
+container_name: captive_db
+restart: unless-stopped
+environment:
+POSTGRES_USER: ${POSTGRES_USER}
+POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+POSTGRES_DB: ${POSTGRES_DB}
+volumes:
+- db_data:/var/lib/postgresql/data
+- ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+ports:
+- "5432:5432"
+
+
+adminer:
+image: adminer
+container_name: captive_adminer
+restart: unless-stopped
+ports:
+- "8080:8080"
+
+
+volumes:
+db_data:
