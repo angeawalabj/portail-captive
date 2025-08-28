@@ -1,34 +1,41 @@
-# Logs & temporaires
-*.log
-*.tmp
-*.swp
-*.bak
-
-
-# Environnements
-.env
-.env.*
-
-
 # Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.log
+
+# Environnements
+.env
 .venv/
+venv/
+ENV/
 
+# Pytest / Coverage
+.pytest_cache/
+.coverage
+htmlcov/
 
-# Node (si UI étendue)
-node_modules/
+# IDE
+.vscode/
+.idea/
 
-
-# DB
+# Docker
+*.pid
+*.sock
 *.db
-*.sqlite
+docker-data/
+volumes/
 
+# Node (si assets front)
+node_modules/
+dist/
+build/
 
-# Docker overrides
-docker-compose.override.yml
+# Logs
+logs/
+*.log
 
-
-# OS
-.DS_Store
-Thumbs.db
+# Cache
+.cache/

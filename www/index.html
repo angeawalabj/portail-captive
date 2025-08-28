@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Connexion Wi-Fi</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>Captive Portal - Connexion</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h2>Bienvenue sur MonHotspot</h2>
-    <form action="login.php" method="post">
-      <label>Identifiant :</label>
-      <input type="text" name="username" required>
-      <label>Mot de passe :</label>
-      <input type="password" name="password" required>
-      <button type="submit">Connexion</button>
-    </form>
-  </div>
+    <div class="container">
+        <h1>Connexion au Wi-Fi</h1>
+        <form id="loginForm">
+            <label for="username">Nom d'utilisateur</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Mot de passe</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Se connecter</button>
+        </form>
+        <div id="message"></div>
+    </div>
+
+    <script src="login.js"></script>
 </body>
 </html>
