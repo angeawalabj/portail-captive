@@ -6,17 +6,17 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.models import Base
 
-# ==========================
-# Setup DB test
-# ==========================
-SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"  # DB en mémoire pour tests
+# -------------------------
+# DB SQLite in-memory pour tests
+# -------------------------
+SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
 engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Créer les tables
+# Créer toutes les tables
 Base.metadata.create_all(bind=engine)
 
-# Dépendance override pour FastAPI
+# Override dependency FastAPI pour utiliser la DB de test
 def override_get_db():
     db = TestingSessionLocal()
     try:
@@ -28,29 +28,28 @@ app.dependency_overrides[deps.get_db] = override_get_db
 
 client = TestClient(app)
 
-# ==========================
-# Tests fonctions hash
-# ==========================
+# -------------------------
+# Tests hash mot de passe
+# -------------------------
 def test_password_hash_and_verify():
     password = "mysecretpassword"
     hashed = auth.get_password_hash(password)
     assert hashed != password
     assert auth.verify_password(password, hashed)
 
-# ==========================
+# -------------------------
 # Tests création token JWT
-# ==========================
+# -------------------------
 def test_create_access_token():
     data = {"sub": "alice"}
     token = auth.create_access_token(data)
     decoded = auth.jwt.decode(token, auth.SECRET_KEY, algorithms=[auth.ALGORITHM])
     assert decoded["sub"] == "alice"
 
-# ==========================
-# Test FastAPI /get_current_user
-# ==========================
+# -------------------------
+# Test get_current_user
+# -------------------------
 def test_get_current_user_with_token():
-    # Création d'un user fake dans DB
     db = next(override_get_db())
     user = models.User(username="alice", password_hash=auth.get_password_hash("pass"), role="admin", is_active=True)
     db.add(user)
@@ -58,15 +57,13 @@ def test_get_current_user_with_token():
     db.refresh(user)
 
     token = auth.create_access_token({"sub": user.username})
-    
-    # Décodage manuel pour tester dépendance
     current_user = auth.get_current_user(token=token, db=db)
     assert current_user.username == "alice"
     assert current_user.role == "admin"
 
-# ==========================
+# -------------------------
 # Test rôles admin/staff
-# ==========================
+# -------------------------
 def test_role_checks():
     db = next(override_get_db())
     admin_user = models.User(username="admin1", password_hash=auth.get_password_hash("pass"), role="admin", is_active=True)
