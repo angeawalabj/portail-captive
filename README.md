@@ -155,3 +155,4 @@ CI/CD : GitHub Actions / Poetry
 License
 
 MIT License
+Voir le fichier [LICENSE](LICENSE) pour plus de détails.
