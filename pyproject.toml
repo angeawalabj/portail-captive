@@ -2,7 +2,7 @@
 name = "captive-portal"
 version = "0.1.0"
 description = "Captive Portal FastAPI App with Admin UI"
-authors = ["Ange AWALA <your-email@example.com>"]
+authors = ["Ange AWALA <ange.awala.bj@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 packages = [
